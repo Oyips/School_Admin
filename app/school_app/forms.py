@@ -1,6 +1,12 @@
 from django import forms
 from .models import Class, Student
 from accounts.models import User
+from django import forms
+from .models import Class, Student
+
+
+class AttendanceDateForm(forms.Form):
+    date = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}))
 
 
 class ClassForm(forms.ModelForm):
