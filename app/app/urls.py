@@ -12,6 +12,7 @@ urlpatterns = [
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('classes/create/', school_views.create_class, name='create_class'),
     path('students/add/', school_views.add_student, name='add_student'),
+    path('attendance/<int:class_id>/', school_views.mark_attendance, name='mark_attendance'),
 ]
 
 if settings.DEBUG:
