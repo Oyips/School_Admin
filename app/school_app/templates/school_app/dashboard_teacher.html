@@ -2,6 +2,9 @@
 <h2>My Classes</h2>
 <ul>
   {% for c in classes %}
-    <li>{{ c.name }}</li>
+    <li>
+      {{ c.name }} —
+      <a href="{% url 'mark_attendance' c.id %}">Mark Attendance</a>
+    </li>
   {% endfor %}
 </ul>
