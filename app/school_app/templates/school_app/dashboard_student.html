@@ -1,0 +1,4 @@
+<h1>Student Dashboard</h1>
+{% if profile %}
+  <p>{{ profile.first_name }} {{ profile.last_name }} — {{ profile.school_class.name }}</p>
+{% endif %}
