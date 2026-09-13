@@ -10,6 +10,8 @@ urlpatterns = [
     path('dashboard/', school_views.dashboard, name='dashboard'),
     path('login/', auth_views.LoginView.as_view(template_name='school_app/login.html'), name='login'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
+    path('classes/create/', school_views.create_class, name='create_class'),
+    path('students/add/', school_views.add_student, name='add_student'),
 ]
 
 if settings.DEBUG:
