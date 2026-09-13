@@ -1,0 +1,7 @@
+<h1>Platform Admin Dashboard</h1>
+<h2>All Schools</h2>
+<ul>
+  {% for s in schools %}
+    <li>{{ s.name }} — {% if s.is_approved %}Approved{% else %}Pending{% endif %}</li>
+  {% endfor %}
+</ul>
