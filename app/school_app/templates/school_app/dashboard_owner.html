@@ -1,4 +1,8 @@
 <h1>{{ school.name }} — Owner Dashboard</h1>
+<p>
+  <a href="{% url 'create_class' %}">+ Create Class</a> |
+  <a href="{% url 'add_student' %}">+ Add Student</a>
+</p>
 {% if school.logo %}
   <img src="{{ school.logo.url }}" width="100">
 {% endif %}
