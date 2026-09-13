@@ -1,6 +1,8 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from .models import School, Class, Student
+from django.shortcuts import redirect
+from .forms import ClassForm, StudentForm
 
 
 @login_required
@@ -34,3 +36,41 @@ def dashboard(request):
             'profile': Student.visible_to(user).first(),
         }
         return render(request, 'school_app/dashboard_student.html', context)
+
+
+  
+
+@login_required
+def create_class(request):
+    if request.user.role != 'school_owner':
+        return redirect('dashboard')
+
+    if request.method == 'POST':
+        form = ClassForm(request.POST, school=request.user.school)
+        if form.is_valid():
+            new_class = form.save(commit=False)
+            new_class.school = request.user.school
+            new_class.save()
+            return redirect('dashboard')
+    else:
+        form = ClassForm(school=request.user.school)
+
+    return render(request, 'school_app/create_class.html', {'form': form})
+
+
+@login_required
+def add_student(request):
+    if request.user.role != 'school_owner':
+        return redirect('dashboard')
+
+    if request.method == 'POST':
+        form = StudentForm(request.POST, request.FILES, school=request.user.school)
+        if form.is_valid():
+            new_student = form.save(commit=False)
+            new_student.school = request.user.school
+            new_student.save()
+            return redirect('dashboard')
+    else:
+        form = StudentForm(school=request.user.school)
+
+    return render(request, 'school_app/add_student.html', {'form': form})
