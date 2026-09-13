@@ -3,6 +3,46 @@ from django.shortcuts import render
 from .models import School, Class, Student
 from django.shortcuts import redirect
 from .forms import ClassForm, StudentForm
+from datetime import date
+from .models import Attendance
+from .forms import AttendanceDateForm
+
+
+@login_required
+def mark_attendance(request, class_id):
+    school_class = Class.objects.get(id=class_id)
+
+    # security check: this class must actually belong to this teacher
+    if school_class.teacher != request.user:
+        return redirect('dashboard')
+
+    selected_date = request.GET.get('date', str(date.today()))
+    students = Student.objects.filter(school_class=school_class)
+
+    if request.method == 'POST':
+        for student in students:
+            present = request.POST.get(f'present_{student.id}') == 'on'
+            Attendance.objects.update_or_create(
+                student=student,
+                date=selected_date,
+                defaults={'present': present, 'school_class': school_class, 'marked_by': request.user}
+            )
+        return redirect('dashboard')
+
+    # for each student, check if there's already a record for this date (to pre-fill the checkbox)
+    existing = {a.student_id: a.present for a in Attendance.objects.filter(
+        school_class=school_class, date=selected_date)}
+
+    student_rows = [
+        {'student': s, 'present': existing.get(s.id, True)} for s in students
+    ]
+
+    context = {
+        'school_class': school_class,
+        'student_rows': student_rows,
+        'selected_date': selected_date,
+    }
+    return render(request, 'school_app/mark_attendance.html', context)
 
 
 @login_required
