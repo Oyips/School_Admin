@@ -1,0 +1,19 @@
+<!-- templates/school_app/dashboard_owner.html -->
+<h1>{{ school.name }} — Owner Dashboard</h1>
+{% if school.logo %}
+  <img src="{{ school.logo.url }}" width="100">
+{% endif %}
+
+<h2>Classes</h2>
+<ul>
+  {% for c in classes %}
+    <li>{{ c.name }} — Teacher: {{ c.teacher.username|default:"Unassigned" }}</li>
+  {% endfor %}
+</ul>
+
+<h2>Students</h2>
+<ul>
+  {% for s in students %}
+    <li>{{ s.first_name }} {{ s.last_name }} ({{ s.school_class.name }})</li>
+  {% endfor %}
+</ul>
