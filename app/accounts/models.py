@@ -1,15 +1,14 @@
-# accounts/admin.py
-from django.contrib import admin
-from django.contrib.auth.admin import UserAdmin
-from .models import User
+from django.db import models
+from django.contrib.auth.models import AbstractUser
 
-class CustomUserAdmin(UserAdmin):
-    fieldsets = UserAdmin.fieldsets + (
-        ('Role & School', {'fields': ('role', 'school')}),
-    )
-    add_fieldsets = UserAdmin.add_fieldsets + (
-        ('Role & School', {'fields': ('role', 'school')}),
-    )
-    list_display = ('username', 'email', 'role', 'school', 'is_staff')
 
-admin.site.register(User, CustomUserAdmin)
+class User(AbstractUser):
+    ROLE_CHOICES = [
+        ('platform_admin', 'Platform Admin'),
+        ('school_owner', 'School Owner'),
+        ('teacher', 'Teacher'),
+        ('student', 'Student'),
+    ]
+    role = models.CharField(max_length=20, choices=ROLE_CHOICES)
+    school = models.ForeignKey('school_app.School', null=True, blank=True,
+                                on_delete=models.CASCADE, related_name='members')
