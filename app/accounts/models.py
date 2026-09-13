@@ -13,5 +13,5 @@ class User(AbstractUser):
         ('student', 'Student'),
     ]
     role = models.CharField(max_length=20, choices=ROLE_CHOICES)
-    school = models.ForeignKey('schools.School', null=True, blank=True,
+    school = models.ForeignKey('school_app.School', null=True, blank=True,
                                 on_delete=models.CASCADE, related_name='members')
