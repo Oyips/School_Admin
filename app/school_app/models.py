@@ -13,6 +13,12 @@ class School(models.Model):
     def __str__(self):
         return self.name
 
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        if self.owner and self.owner.school_id != self.id:
+            self.owner.school = self
+            self.owner.save(update_fields=['school'])
+
 
 class Class(models.Model):
     school = models.ForeignKey(School, on_delete=models.CASCADE, related_name='classes')
