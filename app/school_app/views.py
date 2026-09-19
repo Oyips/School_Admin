@@ -150,3 +150,13 @@ def enter_grades(request, class_id):
         'students': students,
     }
     return render(request, 'school_app/enter_grades.html', context)
+
+@login_required
+def approve_school(request, school_id):
+    if request.user.role != 'platform_admin':
+        return redirect('dashboard')
+
+    school = School.objects.get(id=school_id)
+    school.is_approved = True
+    school.save()
+    return redirect('dashboard')
