@@ -5,6 +5,7 @@
     <li>
       {{ c.name }} —
       <a href="{% url 'mark_attendance' c.id %}">Mark Attendance</a>
+      <a href="{% url 'enter_grades' c.id %}">Enter Grades</a>
     </li>
   {% endfor %}
 </ul>
