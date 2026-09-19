@@ -1,18 +1,22 @@
-<h1>Enter Grades — {{ school_class.name }}</h1>
-
-<form method="post">
-  {% csrf_token %}
-  <p>
-    <label>Subject: <input type="text" name="subject" required></label>
-    <label>Date: <input type="date" name="date" required></label>
-  </p>
-  <ul>
-    {% for student in students %}
-      <li>
-        {{ student.first_name }} {{ student.last_name }}:
-        <input type="number" step="0.01" name="score_{{ student.id }}" placeholder="Score">
-      </li>
-    {% endfor %}
-  </ul>
-  <button type="submit">Save Grades</button>
-</form>
+{% extends 'school_app/base.html' %}
+{% block content %}
+<div class="card">
+  <h1>Enter Grades — {{ school_class.name }}</h1>
+  <form method="post">
+    {% csrf_token %}
+    <p>
+      <label>Subject: <input type="text" name="subject" required></label>
+      <label>Date: <input type="date" name="date" required></label>
+    </p>
+    <ul>
+      {% for student in students %}
+        <li>
+          {{ student.first_name }} {{ student.last_name }}:
+          <input type="number" step="0.01" name="score_{{ student.id }}" placeholder="Score">
+        </li>
+      {% endfor %}
+    </ul>
+    <button type="submit">Save Grades</button>
+  </form>
+</div>
+{% endblock %}
