@@ -1,25 +1,35 @@
-<h1>Student Dashboard</h1>
+{% extends 'school_app/base.html' %}
+{% block content %}
+<div class="card">
+  <h1>Student Dashboard</h1>
+  {% if profile %}
+    <h2>{{ profile.first_name }} {{ profile.last_name }}</h2>
+    {% if profile.photo %}
+      <img src="{{ profile.photo.url }}" width="80">
+    {% endif %}
+    <p>Class: {{ profile.school_class.name }}</p>
+  {% else %}
+    <p>No student profile linked to your account yet. Contact your school owner.</p>
+  {% endif %}
+</div>
 
 {% if profile %}
-  <h2>{{ profile.first_name }} {{ profile.last_name }}</h2>
-  {% if profile.photo %}
-    <img src="{{ profile.photo.url }}" width="100">
-  {% endif %}
-  <p>Class: {{ profile.school_class.name }}</p>
-
+<div class="card">
   <h3>Recent Attendance</h3>
   <ul>
     {% for a in attendance_records %}
       <li>{{ a.date }} — {% if a.present %}Present{% else %}Absent{% endif %}</li>
     {% endfor %}
   </ul>
+</div>
 
+<div class="card">
   <h3>Grades</h3>
   <ul>
     {% for g in grades %}
       <li>{{ g.subject }}: {{ g.score }} ({{ g.date_recorded }})</li>
     {% endfor %}
   </ul>
-{% else %}
-  <p>No student profile linked to your account yet. Contact your school owner.</p>
+</div>
 {% endif %}
+{% endblock %}
