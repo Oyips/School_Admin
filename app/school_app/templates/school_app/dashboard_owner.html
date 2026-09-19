@@ -1,22 +1,51 @@
-<h1>{{ school.name }} — Owner Dashboard</h1>
-<p>
-  <a href="{% url 'create_class' %}">+ Create Class</a> |
-  <a href="{% url 'add_student' %}">+ Add Student</a>
-</p>
-{% if school.logo %}
-  <img src="{{ school.logo.url }}" width="100">
-{% endif %}
+{% extends 'school_app/base.html' %}
+{% block content %}
+<div class="card">
+  <h1>{{ school.name }} — Owner Dashboard</h1>
+  {% if school.logo %}
+    <img src="{{ school.logo.url }}" width="80">
+  {% endif %}
+  <p>
+    <a class="link" href="{% url 'create_class' %}">+ Create Class</a>
+    <a class="link" href="{% url 'add_student' %}">+ Add Student</a>
+  </p>
+</div>
 
-<h2>Classes</h2>
-<ul>
-  {% for c in classes %}
-    <li>{{ c.name }} — Teacher: {{ c.teacher.username|default:"Unassigned" }}</li>
-  {% endfor %}
-</ul>
+<div class="card">
+  <h2>Classes</h2>
+  <ul>
+    {% for c in classes %}
+      <li>{{ c.name }} — Teacher: {{ c.teacher.username|default:"Unassigned" }}</li>
+    {% endfor %}
+  </ul>
+</div>
 
-<h2>Students</h2>
-<ul>
-  {% for s in students %}
-    <li>{{ s.first_name }} {{ s.last_name }} ({{ s.school_class.name }})</li>
-  {% endfor %}
-</ul>
+<div class="card">
+  <h2>Students</h2>
+  <ul>
+    {% for s in students %}
+      <li>{{ s.first_name }} {{ s.last_name }} ({{ s.school_class.name }})</li>
+    {% endfor %}
+  </ul>
+</div>
+
+<div class="card">
+  <h2>Attendance Rate by Class</h2>
+  <canvas id="attendanceChart" height="120"></canvas>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+<script>
+  const labels = [{% for a in attendance_summary %}"{{ a.name }}",{% endfor %}];
+  const rates = [{% for a in attendance_summary %}{{ a.rate }},{% endfor %}];
+
+  new Chart(document.getElementById('attendanceChart'), {
+    type: 'bar',
+    data: {
+      labels: labels,
+      datasets: [{ label: 'Attendance %', data: rates, backgroundColor: '#2563eb' }]
+    },
+    options: { scales: { y: { beginAtZero: true, max: 100 } } }
+  });
+</script>
+{% endblock %}
