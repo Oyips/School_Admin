@@ -1,7 +1,24 @@
 <h1>Platform Admin Dashboard</h1>
+
+<h2>Pending Approval</h2>
+<ul>
+  {% for s in pending_schools %}
+    <li>
+      {{ s.name }} —
+      <a href="{% url 'approve_school' s.id %}">Approve</a>
+    </li>
+  {% empty %}
+    <li>None pending.</li>
+  {% endfor %}
+</ul>
+
 <h2>All Schools</h2>
 <ul>
   {% for s in schools %}
-    <li>{{ s.name }} — {% if s.is_approved %}Approved{% else %}Pending{% endif %}</li>
+    <li>
+      {{ s.name }} —
+      {% if s.is_approved %}Approved{% else %}Pending{% endif %}
+      {% if s.owner %} — Owner: {{ s.owner.username }}{% endif %}
+    </li>
   {% endfor %}
 </ul>
