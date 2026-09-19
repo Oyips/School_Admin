@@ -74,11 +74,13 @@ def dashboard(request):
         return render(request, 'school_app/dashboard_teacher.html', context)
 
     if user.role == 'student':
-        context = {
-            'profile': Student.visible_to(user).first(),
-        }
-        return render(request, 'school_app/dashboard_student.html', context)
-
+      profile = Student.visible_to(user).first()
+      context = {
+        'profile': profile,
+        'attendance_records': profile.attendance_records.order_by('-date')[:30] if profile else [],
+        'grades': profile.grades.order_by('-date_recorded') if profile else [],
+      }
+      return render(request, 'school_app/dashboard_student.html', context)
 
   
 
