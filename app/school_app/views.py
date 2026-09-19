@@ -59,13 +59,21 @@ def dashboard(request):
         return render(request, 'school_app/dashboard_admin.html', context)
 
     if user.role == 'school_owner':
-        context = {
-            'school': user.school,
-            'classes': Class.visible_to(user),
-            'students': Student.visible_to(user),
-        }
-        return render(request, 'school_app/dashboard_owner.html', context)
+      classes = Class.visible_to(user)
+      attendance_summary = []
+      for c in classes:
+        total = Attendance.objects.filter(school_class=c).count()
+        present = Attendance.objects.filter(school_class=c, present=True).count()
+        rate = round((present / total) * 100, 1) if total else 0
+        attendance_summary.append({'name': c.name, 'rate': rate})
 
+      context = {
+        'school': user.school,
+        'classes': classes,
+        'students': Student.visible_to(user),
+        'attendance_summary': attendance_summary,
+      }
+      return render(request, 'school_app/dashboard_owner.html', context)
     if user.role == 'teacher':
         context = {
             'classes': Class.visible_to(user),
