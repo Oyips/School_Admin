@@ -6,6 +6,8 @@ from .forms import ClassForm, StudentForm
 from datetime import date
 from .models import Attendance
 from .forms import AttendanceDateForm
+from .models import Grade
+from .forms import GradeEntryForm
 
 
 @login_required
@@ -114,3 +116,35 @@ def add_student(request):
         form = StudentForm(school=request.user.school)
 
     return render(request, 'school_app/add_student.html', {'form': form})
+
+  
+
+
+@login_required
+def enter_grades(request, class_id):
+    school_class = Class.objects.get(id=class_id)
+
+    if school_class.teacher != request.user:
+        return redirect('dashboard')
+
+    students = Student.objects.filter(school_class=school_class)
+
+    if request.method == 'POST':
+        subject = request.POST.get('subject')
+        grade_date = request.POST.get('date')
+        for student in students:
+            score = request.POST.get(f'score_{student.id}')
+            if score:  # skip blanks — don't create a grade with no value
+                Grade.objects.update_or_create(
+                    student=student,
+                    school_class=school_class,
+                    subject=subject,
+                    defaults={'score': score}
+                )
+        return redirect('dashboard')
+
+    context = {
+        'school_class': school_class,
+        'students': students,
+    }
+    return render(request, 'school_app/enter_grades.html', context)
