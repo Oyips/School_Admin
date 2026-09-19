@@ -13,7 +13,8 @@ urlpatterns = [
     path('classes/create/', school_views.create_class, name='create_class'),
     path('students/add/', school_views.add_student, name='add_student'),
     path('attendance/<int:class_id>/', school_views.mark_attendance, name='mark_attendance'),
-  path('grades/<int:class_id>/', school_views.enter_grades, name='enter_grades'),
+    path('grades/<int:class_id>/', school_views.enter_grades, name='enter_grades'),
+    path('schools/<int:school_id>/approve/', school_views.approve_school, name='approve_school'),
 ]
 
 if settings.DEBUG:
