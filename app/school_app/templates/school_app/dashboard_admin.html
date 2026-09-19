@@ -1,24 +1,33 @@
-<h1>Platform Admin Dashboard</h1>
+{% extends 'school_app/base.html' %}
+{% block content %}
+<div class="card">
+  <h1>Platform Admin Dashboard</h1>
+</div>
 
-<h2>Pending Approval</h2>
-<ul>
-  {% for s in pending_schools %}
-    <li>
-      {{ s.name }} —
-      <a href="{% url 'approve_school' s.id %}">Approve</a>
-    </li>
-  {% empty %}
-    <li>None pending.</li>
-  {% endfor %}
-</ul>
+<div class="card">
+  <h2>Pending Approval</h2>
+  <ul>
+    {% for s in pending_schools %}
+      <li>
+        {{ s.name }} —
+        <a class="link" href="{% url 'approve_school' s.id %}">Approve</a>
+      </li>
+    {% empty %}
+      <li>None pending.</li>
+    {% endfor %}
+  </ul>
+</div>
 
-<h2>All Schools</h2>
-<ul>
-  {% for s in schools %}
-    <li>
-      {{ s.name }} —
-      {% if s.is_approved %}Approved{% else %}Pending{% endif %}
-      {% if s.owner %} — Owner: {{ s.owner.username }}{% endif %}
-    </li>
-  {% endfor %}
-</ul>
+<div class="card">
+  <h2>All Schools</h2>
+  <ul>
+    {% for s in schools %}
+      <li>
+        {{ s.name }} —
+        {% if s.is_approved %}Approved{% else %}Pending{% endif %}
+        {% if s.owner %} — Owner: {{ s.owner.username }}{% endif %}
+      </li>
+    {% endfor %}
+  </ul>
+</div>
+{% endblock %}
