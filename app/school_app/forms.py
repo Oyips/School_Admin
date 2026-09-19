@@ -31,3 +31,7 @@ class StudentForm(forms.ModelForm):
         if school:
             # only let the owner assign students to classes within their own school
             self.fields['school_class'].queryset = Class.objects.filter(school=school)
+
+class GradeEntryForm(forms.Form):
+  subject = forms.CharField(max_length=100)
+  date = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}))
