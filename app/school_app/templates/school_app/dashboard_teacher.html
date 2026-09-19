@@ -13,4 +13,24 @@
     {% endfor %}
   </ul>
 </div>
+
+<div class="card">
+  <h2>Attendance Rate by Class</h2>
+  <canvas id="attendanceChart" height="120"></canvas>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+<script>
+  const labels = [{% for a in attendance_summary %}"{{ a.name }}",{% endfor %}];
+  const rates = [{% for a in attendance_summary %}{{ a.rate }},{% endfor %}];
+
+  new Chart(document.getElementById('attendanceChart'), {
+    type: 'bar',
+    data: {
+      labels: labels,
+      datasets: [{ label: 'Attendance %', data: rates, backgroundColor: '#2563eb' }]
+    },
+    options: { scales: { y: { beginAtZero: true, max: 100 } } }
+  });
+</script>
 {% endblock %}
