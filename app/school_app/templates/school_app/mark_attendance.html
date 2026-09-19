@@ -1,22 +1,28 @@
-<h1>Attendance — {{ school_class.name }} — {{ selected_date }}</h1>
+{% extends 'school_app/base.html' %}
+{% block content %}
+<div class="card">
+  <h1>Attendance — {{ school_class.name }} — {{ selected_date }}</h1>
+  <form method="get">
+    <label>Change date:
+      <input type="date" name="date" value="{{ selected_date }}" onchange="this.form.submit()">
+    </label>
+  </form>
+</div>
 
-<form method="get">
-  <label>Change date:
-    <input type="date" name="date" value="{{ selected_date }}" onchange="this.form.submit()">
-  </label>
-</form>
-
-<form method="post">
-  {% csrf_token %}
-  <ul>
-    {% for row in student_rows %}
-      <li>
-        <label>
-          <input type="checkbox" name="present_{{ row.student.id }}" {% if row.present %}checked{% endif %}>
-          {{ row.student.first_name }} {{ row.student.last_name }}
-        </label>
-      </li>
-    {% endfor %}
-  </ul>
-  <button type="submit">Save Attendance</button>
-</form>
+<div class="card">
+  <form method="post">
+    {% csrf_token %}
+    <ul>
+      {% for row in student_rows %}
+        <li>
+          <label>
+            <input type="checkbox" name="present_{{ row.student.id }}" {% if row.present %}checked{% endif %}>
+            {{ row.student.first_name }} {{ row.student.last_name }}
+          </label>
+        </li>
+      {% endfor %}
+    </ul>
+    <button type="submit">Save Attendance</button>
+  </form>
+</div>
+{% endblock %}
